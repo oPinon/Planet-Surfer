@@ -5,27 +5,54 @@ using UnityEditor;
 [ExecuteInEditMode]
 public class Planet : MonoBehaviour {
 
+	public float mass = 10.0f;
 	public float baseRadius = 10.0f;
 	public float radiusDiff = 1.0f;
 	public int meshResolution = 128;
+	public int colliderResolution = 256;
 
-	public void computeMesh() {
+	public void computeGeometry() {
+
+		// Debug.Log("Computing geometry of " + this.name);
+
+		// Computing mesh
 		MeshFilter meshFilter = this.GetComponent<MeshFilter>();
 		if(!meshFilter) { Debug.LogError( "Couldn't find meshFilter in planet " + this.name ); }
-		else { createUVSphere( meshFilter.sharedMesh, meshResolution, meshResolution ); }
+		else { createUVSphere( meshFilter.sharedMesh, meshResolution, meshResolution/4 ); }
+	
+		// Computing EdgeCollider
+		EdgeCollider2D collider = this.GetComponent<EdgeCollider2D>();
+		if(!collider) { Debug.LogError( "Couldn't find edgeCollider2D in planet " + this.name ); }
+		else { computeEdgeCollider(collider, colliderResolution); }
 	}
 
 	void Start () {
 
-		computeMesh();
+		computeGeometry();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-		if (!Application.isPlaying) { computeMesh(); }
+		if (!Application.isPlaying) { computeGeometry(); }
 
     }
+
+	/* TODO: errors in spherical coordinates formula
+	 * Computes a 2Dcollider alongs the planet's surface
+	 */
+	void computeEdgeCollider(EdgeCollider2D collider, int nbPoints) {
+
+		Vector2[] points = new Vector2[nbPoints+1];
+		for(int i=0; i<nbPoints; i++) {
+			float theta = Mathf.PI/2 + 2*Mathf.PI * (float) i / nbPoints;
+			float x = Mathf.Cos(theta);
+			float y = -Mathf.Sin(theta);
+			points[i] = new Vector2(x,y) * radius(theta,Mathf.PI/2);
+		}
+		points[nbPoints] = points[0];
+		collider.points = points;
+	}
     
     // TODO: a weird seam is visible on one side of the sphere
 	/*
@@ -33,26 +60,27 @@ public class Planet : MonoBehaviour {
 	 * (using the @radius function)
 	 * Phi = Latitude in radians [-Pi/2;Pi/2]
 	 * Theta = Longitude in radians [0;2Pi]
-	 * code base on http://wiki.unity3d.com/index.php/ProceduralPrimitives
+	 * code based on http://wiki.unity3d.com/index.php/ProceduralPrimitives
+	 * the sphere upper part is toward -z (Vector3.back)
 	 */
 	void createUVSphere( Mesh mesh, int nbLong, int nbLat ) {
 
 		Vector3[] vertices = new Vector3[(nbLong+1) * nbLat + 2];
 
 		#region Vertices
-		vertices[0] = Vector3.up * radius(0, Mathf.PI/2); // upper pole
+		vertices[0] = Vector3.forward * radius(0, Mathf.PI/2); // upper pole
 		for( int lat = 0; lat < nbLat; lat++ ) {
 			float phi = Mathf.PI * (float) (lat+1) / (nbLat+1); // latitude
 
 			for( int lon=0; lon<=nbLong; lon++) {
 				float theta = 2*Mathf.PI * (float) (lon == nbLong ? 0 : lon) / nbLong; // longitude
 				float x = Mathf.Sin (phi)*Mathf.Cos(theta);
-				float y = Mathf.Cos(phi);
-				float z = Mathf.Sin (phi)*Mathf.Sin (theta);
+				float y = -Mathf.Sin (phi)*Mathf.Sin (theta);
+                float z = Mathf.Cos(phi);
 				vertices[lon+lat*(nbLong+1)+1] = new Vector3(x,y,z)*radius(theta, phi);
 			}
 		}
-		vertices[vertices.Length-1] = -Vector3.up * radius (0, -Mathf.PI/2);
+		vertices[vertices.Length-1] = Vector3.back * radius (0, -Mathf.PI/2);
 		#endregion
 
 		#region UVs
@@ -122,7 +150,7 @@ public class Planet : MonoBehaviour {
 	 */
 	float radius( float theta, float phi ) {
 
-		float diff = Mathf.Cos(16*phi)*Mathf.Cos(16*theta);
+		float diff = Mathf.Cos(6*phi)*Mathf.Cos(16*theta)*Mathf.Sin (phi)*Mathf.Cos(7*theta);
 		return baseRadius + radiusDiff*diff;
 	}
 }

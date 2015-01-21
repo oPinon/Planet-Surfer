@@ -18,7 +18,7 @@ public class Planet : MonoBehaviour {
 		// Computing mesh
 		MeshFilter meshFilter = this.GetComponent<MeshFilter>();
 		if(!meshFilter) { Debug.LogError( "Couldn't find meshFilter in planet " + this.name ); }
-		else { createUVSphere( meshFilter.sharedMesh, meshResolution, meshResolution/4 ); }
+		else { createUVSphere( meshFilter.sharedMesh, meshResolution, 24 ); }
 	
 		// Computing EdgeCollider
 		EdgeCollider2D collider = this.GetComponent<EdgeCollider2D>();
@@ -48,7 +48,7 @@ public class Planet : MonoBehaviour {
 			float theta = Mathf.PI/2 + 2*Mathf.PI * (float) i / nbPoints;
 			float x = Mathf.Cos(theta);
 			float y = -Mathf.Sin(theta);
-			points[i] = new Vector2(x,y) * radius(theta,Mathf.PI/2);
+			points[i] = new Vector2(x,y) * radius(-theta,Mathf.PI/2);
 		}
 		points[nbPoints] = points[0];
 		collider.points = points;
@@ -150,7 +150,7 @@ public class Planet : MonoBehaviour {
 	 */
 	float radius( float theta, float phi ) {
 
-		float diff = Mathf.Cos(6*phi)*Mathf.Cos(16*theta)*Mathf.Sin (phi)*Mathf.Cos(7*theta);
+		float diff = Mathf.Cos(16*phi)*Mathf.Cos(42*theta)*Mathf.Sin (phi)*Mathf.Cos(17*theta);
 		return baseRadius + radiusDiff*diff;
 	}
 }

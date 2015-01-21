@@ -30,6 +30,7 @@ public class Player : MonoBehaviour {
 		Vector2 newGravity = new Vector2();
 		foreach(Planet p in _planets) {
 			Vector3 posDiff = p.transform.position - this.transform.position;
+			posDiff.Normalize();
 			newGravity += new Vector2(posDiff.x, posDiff.y) * p.mass;
 		}
 		_gravity = newGravity;

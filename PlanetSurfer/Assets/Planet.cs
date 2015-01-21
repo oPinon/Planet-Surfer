@@ -18,7 +18,7 @@ public class Planet : MonoBehaviour {
 		// Computing mesh
 		MeshFilter meshFilter = this.GetComponent<MeshFilter>();
 		if(!meshFilter) { Debug.LogError( "Couldn't find meshFilter in planet " + this.name ); }
-		else { createUVSphere( meshFilter.sharedMesh, meshResolution, 24 ); }
+		else { createFlatMesh( meshFilter.sharedMesh, meshResolution ); }
 	
 		// Computing EdgeCollider
 		EdgeCollider2D collider = this.GetComponent<EdgeCollider2D>();
@@ -134,6 +134,8 @@ public class Planet : MonoBehaviour {
 		}
 		#endregion
 
+        mesh.Clear();
+
 		mesh.vertices = vertices;
 		mesh.uv = uvs;
 		mesh.triangles = triangles;
@@ -143,6 +145,51 @@ public class Planet : MonoBehaviour {
 		mesh.Optimize();
 	}
 
+    void createIcoSphere(Mesh mesh, int recursionLevel)
+    {
+        Mesh icosphere = IcoSphere.Create(recursionLevel);
+
+        // TODO: change radius
+
+        mesh.Clear();
+        mesh.vertices = icosphere.vertices;
+		mesh.triangles = icosphere.triangles;
+        mesh.uv = icosphere.uv;
+        mesh.normals = icosphere.normals;
+
+        mesh.RecalculateBounds();
+        mesh.RecalculateNormals();
+        mesh.Optimize();
+    }
+
+	void createFlatMesh(Mesh mesh, int nbPoints) {
+
+		Vector3[] points = new Vector3[nbPoints+2];
+		int[] triangles = new int[3*nbPoints];
+		for(int i=0; i<nbPoints; i++) {
+
+			float theta = Mathf.PI/2 + 2*Mathf.PI * (float) i / nbPoints;
+			float x = Mathf.Cos(theta);
+			float y = -Mathf.Sin(theta);
+
+			points[i] = new Vector3(x,y,0) * radius(-theta,Mathf.PI/2);
+
+			int nextVertice = (i+1)%nbPoints;
+			triangles[3*i+0] = i;
+			triangles[3*i+1] = nextVertice;
+			triangles[3*i+2] = nbPoints+1;
+		}
+		points[nbPoints] = points[0];
+		points[nbPoints+1] = Vector3.zero; // last point is (0,0,0)
+
+		mesh.Clear();
+		mesh.vertices = points;
+		mesh.triangles = triangles;
+
+		mesh.RecalculateBounds();
+		mesh.RecalculateNormals();
+	}
+
 	/*
 	 * @returns a radius given spherical coordinates
 	 * coordinate system used :
@@ -150,7 +197,7 @@ public class Planet : MonoBehaviour {
 	 */
 	float radius( float theta, float phi ) {
 
-		float diff = Mathf.Cos(16*phi)*Mathf.Cos(42*theta)*Mathf.Sin (phi)*Mathf.Cos(17*theta);
+		float diff = ( Mathf.Cos (42*theta*Mathf.Sin (phi)) + 0.7f*Mathf.Cos (17*theta*Mathf.Sin (phi)) )* Mathf.Cos(64*phi);
 		return baseRadius + radiusDiff*diff;
 	}
 }

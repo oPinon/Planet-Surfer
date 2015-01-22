@@ -3,8 +3,10 @@ using System.Collections;
 
 public class Player : MonoBehaviour {
 
-	public GameObject Planets;
-	public float _gravityFactor = 2f;
+	public GameObject Planets; // Parent object of the planets that affect the player
+	public float _gravityFactor = 2f; // multiplies the gravity when the controller (spacebar) is used
+	public AnimationCurve gravityCurve = new AnimationCurve(); // evolution of gravity for the distance
+	public float maxGravityDist = 1f; // ratio between gravity's max distance and planet's radius
 
 	private Vector2 _gravity;
 	private Planet[] _planets;
@@ -30,8 +32,9 @@ public class Player : MonoBehaviour {
 		Vector2 newGravity = new Vector2();
 		foreach(Planet p in _planets) {
 			Vector3 posDiff = p.transform.position - this.transform.position;
-			posDiff.Normalize();
-			newGravity += new Vector2(posDiff.x, posDiff.y) * p.mass;
+			float distance = posDiff.magnitude;
+			float factor = p.mass * gravityCurve.Evaluate((distance-p.baseRadius)/(maxGravityDist*p.baseRadius));
+			newGravity += new Vector2(posDiff.x, posDiff.y)/distance * factor;
 		}
 		_gravity = newGravity;
 	}

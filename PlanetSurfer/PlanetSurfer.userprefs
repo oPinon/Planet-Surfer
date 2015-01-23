@@ -1,11 +1,11 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\FollowCamera.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Planet.cs">
     <Files>
-      <File FileName="Assets\FollowCamera.cs" Line="46" Column="32" />
-      <File FileName="Assets\Player.cs" Line="8" Column="60" />
+      <File FileName="Assets\Planet.cs" Line="208" Column="102" />
+      <File FileName="Assets\FollowCamera.cs" Line="1" Column="1" />
+      <File FileName="Assets\Player.cs" Line="1" Column="1" />
       <File FileName="Assets\IcoSphere.cs" Line="1" Column="1" />
-      <File FileName="Assets\Planet.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

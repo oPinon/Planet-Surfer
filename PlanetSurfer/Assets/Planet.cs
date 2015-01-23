@@ -18,7 +18,7 @@ public class Planet : MonoBehaviour {
 		// Computing mesh
 		MeshFilter meshFilter = this.GetComponent<MeshFilter>();
 		if(!meshFilter) { Debug.LogError( "Couldn't find meshFilter in planet " + this.name ); }
-		else { createFlatMesh( meshFilter.sharedMesh, meshResolution ); }
+		else { createUVSphere( meshFilter.sharedMesh, meshResolution, meshResolution/8 ); }
 	
 		// Computing EdgeCollider
 		EdgeCollider2D collider = this.GetComponent<EdgeCollider2D>();
@@ -46,9 +46,9 @@ public class Planet : MonoBehaviour {
 		Vector2[] points = new Vector2[nbPoints+1];
 		for(int i=0; i<nbPoints; i++) {
 			float theta = Mathf.PI/2 + 2*Mathf.PI * (float) i / nbPoints;
-			float x = Mathf.Cos(theta);
-			float y = -Mathf.Sin(theta);
-			points[i] = new Vector2(x,y) * radius(-theta,Mathf.PI/2);
+			float x = xFromAngle(theta,Mathf.PI/2);
+			float y = yFromAngle(theta,Mathf.PI/2);
+			points[i] = new Vector2(x,y) * radius(theta,Mathf.PI/2);
 		}
 		points[nbPoints] = points[0];
 		collider.points = points;
@@ -58,7 +58,7 @@ public class Planet : MonoBehaviour {
 	/*
 	 * @returns a UVSphere mesh with a variable radius
 	 * (using the @radius function)
-	 * Phi = Latitude in radians [-Pi/2;Pi/2]
+	 * Phi = Latitude in radians [0;Pi]
 	 * Theta = Longitude in radians [0;2Pi]
 	 * code based on http://wiki.unity3d.com/index.php/ProceduralPrimitives
 	 * the sphere upper part is toward -z (Vector3.back)
@@ -68,19 +68,27 @@ public class Planet : MonoBehaviour {
 		Vector3[] vertices = new Vector3[(nbLong+1) * nbLat + 2];
 
 		#region Vertices
-		vertices[0] = Vector3.forward * radius(0, Mathf.PI/2); // upper pole
+		// top pole
+		float x0 = xFromAngle(0,0);
+		float y0 = yFromAngle(0,0);
+		float z0 = zFromAngle(0,0);
+		vertices[0] = new Vector3(x0,y0,z0) * radius(0, 0);
 		for( int lat = 0; lat < nbLat; lat++ ) {
 			float phi = Mathf.PI * (float) (lat+1) / (nbLat+1); // latitude
 
 			for( int lon=0; lon<=nbLong; lon++) {
 				float theta = 2*Mathf.PI * (float) (lon == nbLong ? 0 : lon) / nbLong; // longitude
-				float x = Mathf.Sin (phi)*Mathf.Cos(theta);
-				float y = -Mathf.Sin (phi)*Mathf.Sin (theta);
-                float z = Mathf.Cos(phi);
+				float x = xFromAngle(theta,phi);
+				float y = yFromAngle(theta,phi);
+                float z = zFromAngle(theta,phi);
 				vertices[lon+lat*(nbLong+1)+1] = new Vector3(x,y,z)*radius(theta, phi);
 			}
 		}
-		vertices[vertices.Length-1] = Vector3.back * radius (0, -Mathf.PI/2);
+		// lower pole
+		float x1 = xFromAngle(0,Mathf.PI);
+		float y1 = yFromAngle(0,Mathf.PI);
+		float z1 = zFromAngle(0,Mathf.PI);
+		vertices[vertices.Length-1] = new Vector3(x1,y1,z1) * radius (0, Mathf.PI);
 		#endregion
 
 		#region UVs
@@ -169,10 +177,10 @@ public class Planet : MonoBehaviour {
 		for(int i=0; i<nbPoints; i++) {
 
 			float theta = Mathf.PI/2 + 2*Mathf.PI * (float) i / nbPoints;
-			float x = Mathf.Cos(theta);
-			float y = -Mathf.Sin(theta);
+			float x = xFromAngle(theta,Mathf.PI/2);
+			float y = yFromAngle(theta,Mathf.PI/2);
 
-			points[i] = new Vector3(x,y,0) * radius(-theta,Mathf.PI/2);
+			points[i] = new Vector3(x,y,0) * radius(theta,Mathf.PI/2);
 
 			int nextVertice = (i+1)%nbPoints;
 			triangles[3*i+0] = i;
@@ -197,7 +205,11 @@ public class Planet : MonoBehaviour {
 	 */
 	float radius( float theta, float phi ) {
 
-		float diff = ( Mathf.Cos (42*theta*Mathf.Sin (phi)) + 0.7f*Mathf.Cos (17*theta*Mathf.Sin (phi)) )* Mathf.Cos(64*phi);
+		float diff = ( Mathf.Cos (32*theta*Mathf.Sin (phi)) + 1f*Mathf.Cos (17*theta*Mathf.Sin (phi)) )* Mathf.Cos( Mathf.Sin (phi)*8*phi);
 		return baseRadius + radiusDiff*diff;
 	}
+
+	static float xFromAngle( float theta, float phi ) { return -Mathf.Cos(theta)*Mathf.Sin(phi); }
+	static float yFromAngle( float theta, float phi ) { return Mathf.Sin(theta)*Mathf.Sin(phi); }
+	static float zFromAngle( float theta, float phi ) { return Mathf.Cos(phi); }
 }

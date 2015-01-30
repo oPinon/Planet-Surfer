@@ -11,6 +11,8 @@ public class Planet : MonoBehaviour {
 	public int meshResolution = 128;
 	public int colliderResolution = 256;
 
+	static int toOdd( int value ) { return value + 1 - (value%2); }
+
 	public void computeGeometry() {
 
 		// Debug.Log("Computing geometry of " + this.name);
@@ -18,7 +20,7 @@ public class Planet : MonoBehaviour {
 		// Computing mesh
 		MeshFilter meshFilter = this.GetComponent<MeshFilter>();
 		if(!meshFilter) { Debug.LogError( "Couldn't find meshFilter in planet " + this.name ); }
-		else { createUVSphere( meshFilter.sharedMesh, meshResolution, meshResolution/8 ); }
+		else { createUVSphere( meshFilter.sharedMesh, meshResolution, toOdd ( (int) Mathf.Sqrt(meshResolution)) ); }
 	
 		// Computing EdgeCollider
 		EdgeCollider2D collider = this.GetComponent<EdgeCollider2D>();
@@ -202,10 +204,13 @@ public class Planet : MonoBehaviour {
 	 * @returns a radius given spherical coordinates
 	 * coordinate system used :
 	 * http://mathworld.wolfram.com/SphericalCoordinates.html
+	 * Phi = Latitude in radians [0;Pi]
+	 * Theta = Longitude in radians [0;2Pi]
 	 */
 	float radius( float theta, float phi ) {
 
-		float diff = ( Mathf.Cos (32*theta*Mathf.Sin (phi)) + 1f*Mathf.Cos (17*theta*Mathf.Sin (phi)) )* Mathf.Cos( Mathf.Sin (phi)*8*phi);
+		float diff = Mathf.Cos(32*theta) + Mathf.Cos (17*theta);
+		diff *= Mathf.Max( 0, -Mathf.Sin(3*phi) ); // equator ( playing part )
 		return baseRadius + radiusDiff*diff;
 	}
 

@@ -27,7 +27,6 @@ public class Player : MonoBehaviour {
 		this.rigidbody2D.AddForce( ( Input.GetKey(KeyCode.Space) ? _gravityFactor : 1) *_gravity);
     }
 
-	// TODO : gravity evolution law
 	void computeGravity() {
 		Vector2 newGravity = new Vector2();
 		foreach(Planet p in _planets) {

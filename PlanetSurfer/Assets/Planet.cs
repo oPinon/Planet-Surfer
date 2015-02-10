@@ -1,26 +1,33 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEditor;
 
-[ExecuteInEditMode]
+//[ExecuteInEditMode]
 public class Planet : MonoBehaviour {
+
+	public struct Coeff { 
+		public float factor;
+		public int period;
+		public Coeff(float factor, int period) { this.factor=factor; this.period=period; }
+	}
 
 	public float mass = 10.0f;
 	public float baseRadius = 10.0f;
 	public float radiusDiff = 1.0f;
 	public int meshResolution = 128;
 	public int colliderResolution = 256;
+	public float Steepness = 0.1f;
+	public List<Coeff> surfaceCoeffs = new List<Coeff>();
 
 	static int toOdd( int value ) { return value + 1 - (value%2); }
 
 	public void computeGeometry() {
 
-		// Debug.Log("Computing geometry of " + this.name);
-
 		// Computing mesh
 		MeshFilter meshFilter = this.GetComponent<MeshFilter>();
 		if(!meshFilter) { Debug.LogError( "Couldn't find meshFilter in planet " + this.name ); }
-		else { createUVSphere( meshFilter.sharedMesh, meshResolution, toOdd ( (int) Mathf.Sqrt(meshResolution)) ); }
+		else { createUVSphere( meshFilter.mesh, meshResolution, toOdd ( (int) Mathf.Sqrt(meshResolution)) ); }
 	
 		// Computing EdgeCollider
 		EdgeCollider2D collider = this.GetComponent<EdgeCollider2D>();
@@ -28,9 +35,18 @@ public class Planet : MonoBehaviour {
 		else { computeEdgeCollider(collider, colliderResolution); }
 	}
 
+	void generate() {
+
+		int basePeriod = (int) (32*Steepness*baseRadius);
+		for(int i=0; i<3; i++) {
+			surfaceCoeffs.Add(new Coeff(Random.Range(0.0f,1.0f)/i,Random.Range(basePeriod/2,basePeriod)));
+		}
+		computeGeometry();
+	}
+
 	void Start () {
 
-		computeGeometry();
+		generate();
 	}
 	
 	// Update is called once per frame
@@ -40,7 +56,7 @@ public class Planet : MonoBehaviour {
 
     }
 
-	/* TODO: errors in spherical coordinates formula
+	/*
 	 * Computes a 2Dcollider alongs the planet's surface
 	 */
 	void computeEdgeCollider(EdgeCollider2D collider, int nbPoints) {
@@ -209,7 +225,8 @@ public class Planet : MonoBehaviour {
 	 */
 	float radius( float theta, float phi ) {
 
-		float diff = Mathf.Cos(32*theta) + Mathf.Cos (17*theta);
+		float diff = 0f;
+		foreach(Coeff c in surfaceCoeffs) { diff += c.factor*Mathf.Cos(c.period*theta); }
 		diff *= Mathf.Max( 0, -Mathf.Sin(3*phi) ); // equator ( playing part )
 		return baseRadius + radiusDiff*diff;
 	}

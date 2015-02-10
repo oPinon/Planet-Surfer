@@ -43,7 +43,6 @@ public class FollowCamera : MonoBehaviour {
 	}
 
 	void updateSize( Vector2 gravity ) {
-		Debug.Log(gravity.magnitude);
 		_camera.orthographicSize = _minSize + maxSize * gravityCurve.Evaluate( gravity.magnitude / maxGravity );
 	}
 }

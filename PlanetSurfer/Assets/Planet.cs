@@ -27,7 +27,10 @@ public class Planet : MonoBehaviour {
 		// Computing mesh
 		MeshFilter meshFilter = this.GetComponent<MeshFilter>();
 		if(!meshFilter) { Debug.LogError( "Couldn't find meshFilter in planet " + this.name ); }
-		else { createUVSphere( meshFilter.mesh, meshResolution, toOdd ( (int) Mathf.Sqrt(meshResolution)) ); }
+		else {
+            if (!meshFilter.sharedMesh) { meshFilter.sharedMesh = new Mesh(); }
+            createUVSphere( meshFilter.sharedMesh, meshResolution, toOdd ( (int) Mathf.Sqrt(meshResolution)) );
+        }
 	
 		// Computing EdgeCollider
 		EdgeCollider2D collider = this.GetComponent<EdgeCollider2D>();
@@ -38,8 +41,11 @@ public class Planet : MonoBehaviour {
 	void generate() {
 
 		int basePeriod = (int) (32*Steepness*baseRadius);
+		surfaceCoeffs.Clear();
 		for(int i=0; i<3; i++) {
-			surfaceCoeffs.Add(new Coeff(Random.Range(0.0f,1.0f)/i,Random.Range(basePeriod/2,basePeriod)));
+			float factor = Random.Range(0f,1f);
+			int period = (int) Random.Range(basePeriod/2f,basePeriod*1.5f);
+			surfaceCoeffs.Add(new Coeff(factor,period));
 		}
 		computeGeometry();
 	}
@@ -52,7 +58,7 @@ public class Planet : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if (!Application.isPlaying) { computeGeometry(); }
+		//if (!Application.isPlaying) { generate(); }
 
     }
 

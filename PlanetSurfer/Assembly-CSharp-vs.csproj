@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\FollowCamera.cs" />
+     <Compile Include="Assets\FollowPosition.cs" />
      <Compile Include="Assets\GalaxyGenerator.cs" />
      <Compile Include="Assets\IcoSphere.cs" />
      <Compile Include="Assets\Planet.cs" />

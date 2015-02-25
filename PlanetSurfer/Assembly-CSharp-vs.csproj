@@ -46,13 +46,16 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\FollowCamera.cs" />
-     <Compile Include="Assets\FollowPosition.cs" />
-     <Compile Include="Assets\GalaxyGenerator.cs" />
-     <Compile Include="Assets\IcoSphere.cs" />
-     <Compile Include="Assets\Planet.cs" />
-     <Compile Include="Assets\Player.cs" />
-     <Compile Include="Assets\SpawnPlayer.cs" />
+     <Compile Include="Assets\MiniMap\FollowPosition.cs" />
+     <Compile Include="Assets\Player\FollowCamera.cs" />
+     <Compile Include="Assets\Player\Player.cs" />
+     <Compile Include="Assets\Player\Score.cs" />
+     <Compile Include="Assets\Player\ShowFPS.cs" />
+     <Compile Include="Assets\Player\Timer.cs" />
+     <Compile Include="Assets\World\GalaxyGenerator.cs" />
+     <Compile Include="Assets\World\IcoSphere.cs" />
+     <Compile Include="Assets\World\Planet.cs" />
+     <Compile Include="Assets\World\SpawnPlayer.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.2/UnityEngine.UI.dll</HintPath>
  </Reference>

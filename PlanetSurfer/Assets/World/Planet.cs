@@ -15,8 +15,8 @@ public class Planet : MonoBehaviour {
 	public float mass = 10.0f;
 	public float baseRadius = 10.0f;
 	public float radiusDiff = 1.0f;
-	public int meshResolution = 128;
-	public int colliderResolution = 256;
+	public int angularMeshResolution = 128;
+	public int angularColliderResolution = 256;
 	public float Steepness = 0.1f;
 	public List<Coeff> surfaceCoeffs = new List<Coeff>();
 
@@ -29,13 +29,14 @@ public class Planet : MonoBehaviour {
 		if(!meshFilter) { Debug.LogError( "Couldn't find meshFilter in planet " + this.name ); }
 		else {
             if (!meshFilter.sharedMesh) { meshFilter.sharedMesh = new Mesh(); }
-            createUVSphere( meshFilter.sharedMesh, meshResolution, toOdd ( (int) Mathf.Sqrt(meshResolution)) );
+			int meshResolution = (int) Mathf.Max(8,baseRadius*angularMeshResolution);
+			createUVSphere( meshFilter.sharedMesh, meshResolution, toOdd ( (int) Mathf.Sqrt(meshResolution)) );
         }
 	
 		// Computing EdgeCollider
 		EdgeCollider2D collider = this.GetComponent<EdgeCollider2D>();
 		if(!collider) { Debug.LogError( "Couldn't find edgeCollider2D in planet " + this.name ); }
-		else { computeEdgeCollider(collider, colliderResolution); }
+		else { computeEdgeCollider(collider, (int) Mathf.Max(8,baseRadius*angularColliderResolution)); }
 	}
 
 	void generate() {

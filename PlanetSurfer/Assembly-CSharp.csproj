@@ -47,7 +47,9 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\MiniMap\FollowPosition.cs" />
+     <Compile Include="Assets\MiniMap\PointTo.cs" />
      <Compile Include="Assets\Player\FollowCamera.cs" />
+     <Compile Include="Assets\Player\GoalArea.cs" />
      <Compile Include="Assets\Player\Player.cs" />
      <Compile Include="Assets\Player\Score.cs" />
      <Compile Include="Assets\Player\ShowFPS.cs" />

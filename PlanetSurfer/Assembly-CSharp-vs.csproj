@@ -57,6 +57,8 @@
      <Compile Include="Assets\World\GalaxyGenerator.cs" />
      <Compile Include="Assets\World\IcoSphere.cs" />
      <Compile Include="Assets\World\Planet.cs" />
+     <Compile Include="Assets\World\ScorePickable.cs" />
+     <Compile Include="Assets\World\SpawnPickables.cs" />
      <Compile Include="Assets\World\SpawnPlayer.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.2/UnityEngine.UI.dll</HintPath>

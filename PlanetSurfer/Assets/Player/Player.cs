@@ -6,16 +6,19 @@ public class Player : MonoBehaviour {
 	public GameObject Planets; // Parent object of the planets that affect the player
 	public float _gravityFactor = 2f; // multiplies the gravity when the controller (spacebar) is used
 	public AnimationCurve gravityCurve = new AnimationCurve(); // evolution of gravity for the distance
-	public float maxGravityDist = 1f; // ratio between gravity's max distance and planet's radius
+	public float maxGravityDist = 1f; // ratio between gravity's max distance and planet's radius	public GameObject Score;
 
 	private Vector2 _gravity;
 	private Planet[] _planets;
+	private Score _score;
 
 	// Use this for initialization
 	void Start () {
 
 		_planets = (Planet[]) Planets.GetComponentsInChildren<Planet>();
 		Debug.Log ("Playing with " + _planets.Length + " planet(s)");
+		_score = Score.GetComponent<Score>();
+		if(_score == null) { Debug.LogError("Not attached score in " + Score); }
 
 		computeGravity();
     }
@@ -40,5 +43,9 @@ public class Player : MonoBehaviour {
 
 	public Vector2 getGravity() {
 		return _gravity;
+	}
+
+	public void incrementScore(int scoreIncrement) {
+		_score.addScore(scoreIncrement);
 	}
 }

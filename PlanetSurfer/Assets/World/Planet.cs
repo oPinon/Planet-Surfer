@@ -54,6 +54,11 @@ public class Planet : MonoBehaviour {
 	void Start () {
 
 		generate();
+
+		SpawnPickables[] spawners = this.GetComponents<SpawnPickables>();
+		if(spawners!=null) {
+			foreach(SpawnPickables s in spawners) { s.Spawn(); }
+		}
 	}
 	
 	// Update is called once per frame
@@ -73,7 +78,7 @@ public class Planet : MonoBehaviour {
 			float theta = Mathf.PI/2 + 2*Mathf.PI * (float) i / nbPoints;
 			float x = xFromAngle(theta,Mathf.PI/2);
 			float y = yFromAngle(theta,Mathf.PI/2);
-			points[i] = new Vector2(x,y) * radius(theta,Mathf.PI/2);
+			points[i] = new Vector2(x,y) * radius(theta);
 		}
 		points[nbPoints] = points[0];
 		collider.points = points;
@@ -205,7 +210,7 @@ public class Planet : MonoBehaviour {
 			float x = xFromAngle(theta,Mathf.PI/2);
 			float y = yFromAngle(theta,Mathf.PI/2);
 
-			points[i] = new Vector3(x,y,0) * radius(theta,Mathf.PI/2);
+			points[i] = new Vector3(x,y,0) * radius(theta);
 
 			int nextVertice = (i+1)%nbPoints;
 			triangles[3*i+0] = i;
@@ -230,12 +235,16 @@ public class Planet : MonoBehaviour {
 	 * Phi = Latitude in radians [0;Pi]
 	 * Theta = Longitude in radians [0;2Pi]
 	 */
-	float radius( float theta, float phi ) {
+	public float radius( float theta, float phi ) {
 
 		float diff = 0f;
 		foreach(Coeff c in surfaceCoeffs) { diff += c.factor*Mathf.Cos(c.period*theta); }
 		diff *= Mathf.Max( 0, -Mathf.Sin(3*phi) ); // equator ( playing part )
 		return baseRadius + radiusDiff*diff;
+	}
+
+	public float radius( float theta ) {
+		return radius(theta, Mathf.PI/2);
 	}
 
 	static float xFromAngle( float theta, float phi ) { return -Mathf.Cos(theta)*Mathf.Sin(phi); }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
+//using UnityEditor;
 
 //[ExecuteInEditMode]
 public class Planet : MonoBehaviour {
@@ -56,7 +56,7 @@ public class Planet : MonoBehaviour {
 		generate();
 
 		SpawnPickables[] spawners = this.GetComponents<SpawnPickables>();
-		if(spawners!=null) {
+		if(spawners != null) {
 			foreach(SpawnPickables s in spawners) { s.Spawn(); }
 		}
 	}

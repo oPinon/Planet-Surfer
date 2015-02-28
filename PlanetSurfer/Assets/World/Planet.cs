@@ -43,11 +43,8 @@ public class Planet : MonoBehaviour {
 
 		int basePeriod = (int) (32*Steepness*baseRadius);
 		surfaceCoeffs.Clear();
-		for(int i=0; i<3; i++) {
-			float factor = Random.Range(0f,1f);
-			int period = (int) Random.Range(basePeriod/2f,basePeriod*1.5f);
-			surfaceCoeffs.Add(new Coeff(factor,period));
-		}
+		surfaceCoeffs.Add(new Coeff(1f,basePeriod));
+		surfaceCoeffs.Add (new Coeff(0.5f,basePeriod/2));
 		computeGeometry();
 	}
 

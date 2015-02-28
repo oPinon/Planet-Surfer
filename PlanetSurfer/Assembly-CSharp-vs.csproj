@@ -48,17 +48,17 @@
   <ItemGroup>
      <Compile Include="Assets\MiniMap\FollowPosition.cs" />
      <Compile Include="Assets\MiniMap\PointTo.cs" />
+     <Compile Include="Assets\Player\Energy.cs" />
      <Compile Include="Assets\Player\FollowCamera.cs" />
      <Compile Include="Assets\Player\GoalArea.cs" />
      <Compile Include="Assets\Player\Player.cs" />
-     <Compile Include="Assets\Player\Score.cs" />
      <Compile Include="Assets\Player\ShowFPS.cs" />
      <Compile Include="Assets\Player\Timer.cs" />
      <Compile Include="Assets\Player\VelocityArrow.cs" />
+     <Compile Include="Assets\World\EnergyPickable.cs" />
      <Compile Include="Assets\World\GalaxyGenerator.cs" />
      <Compile Include="Assets\World\IcoSphere.cs" />
      <Compile Include="Assets\World\Planet.cs" />
-     <Compile Include="Assets\World\ScorePickable.cs" />
      <Compile Include="Assets\World\SpawnPickables.cs" />
      <Compile Include="Assets\World\SpawnPlayer.cs" />
  <Reference Include="UnityEngine.UI">

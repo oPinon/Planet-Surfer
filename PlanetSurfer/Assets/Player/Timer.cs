@@ -11,18 +11,20 @@ public class Timer : MonoBehaviour {
 	{
 		if( !guiText )
 		{
-			Debug.Log("UtilityFramesPerSecond needs a GUIText component!");
+			Debug.Log( this.ToString() + " needs a GUIText component!");
 			enabled = false;
 			return;
 		}
-		_currentTime = MaxTime;
+		_currentTime = 0;
 		_baseString = guiText.text;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-		_currentTime -= Time.deltaTime;
+		_currentTime += Time.deltaTime;
 		guiText.text = _baseString + (int)(10*_currentTime)/10.0f + "s";
 	}
+
+	public float GetTime() { return _currentTime; }
 }

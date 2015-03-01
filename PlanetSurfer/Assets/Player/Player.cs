@@ -11,6 +11,7 @@ public class Player : MonoBehaviour {
 	public float maxGravityDist = 1f; // ratio between gravity's max distance and planet's radius	public GameObject EnergyObject;
 	public int EnergyCost = 50;
 	public GameObject VelocityArrow;
+	public GameObject TimerObject;
 
 	private Vector2 _gravity;
 	private Planet[] _planets;
@@ -18,16 +19,22 @@ public class Player : MonoBehaviour {
 	private PlayerState _state = PlayerState.Playing;
 	private Vector2 _lastVelocity;
 	private VelocityArrow _velocityArrow;
+	private Timer _timer;
 
 	// Use this for initialization
 	void Start () {
 
 		_planets = (Planet[]) Planets.GetComponentsInChildren<Planet>();
 		Debug.Log ("Playing with " + _planets.Length + " planet(s)");
+
 		_energy = EnergyObject.GetComponent<Energy>();
 		if(_energy == null) { Debug.LogError("No attached score in " + EnergyObject.ToString()); }
+
 		_velocityArrow = VelocityArrow.GetComponent<VelocityArrow>();
 		if(_velocityArrow == null) { Debug.LogError("Not attached velocity arrow in " + VelocityArrow); }
+
+		_timer = TimerObject.GetComponent<Timer>();
+		if(_timer == null) { Debug.LogError("Not attached timer in " + TimerObject.ToString()); }
 
 		computeGravity();
     }
@@ -86,4 +93,6 @@ public class Player : MonoBehaviour {
 	public void incrementEnergy(int energyIncrement) {
 		_energy.addEnergy(energyIncrement);
 	}
+
+	public float GetTime() { return _timer.GetTime(); }
 }

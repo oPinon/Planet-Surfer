@@ -7,7 +7,9 @@ public class GoalArea : MonoBehaviour {
 
 		Player player = other.GetComponent<Player>();
 		if(player != null) {
-			Debug.Log ("Entered goal");
+
+			Debug.Log ("Done in " + player.GetTime());
+			Application.LoadLevel ("Menu");
 		}
 	}
 }

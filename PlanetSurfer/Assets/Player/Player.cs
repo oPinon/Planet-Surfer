@@ -8,7 +8,8 @@ public class Player : MonoBehaviour {
 	public GameObject Planets; // Parent object of the planets that affect the player
 	public float _gravityFactor = 2f; // multiplies the gravity when the controller (spacebar) is used
 	public AnimationCurve gravityCurve = new AnimationCurve(); // evolution of gravity for the distance
-	public float maxGravityDist = 1f; // ratio between gravity's max distance and planet's radius	public GameObject EnergyObject;
+	public float maxGravityDist = 1f; // ratio between gravity's max distance and planet's radius
+	public GameObject EnergyObject;
 	public int EnergyCost = 50;
 	public GameObject VelocityArrow;
 	public GameObject TimerObject;
@@ -46,7 +47,7 @@ public class Player : MonoBehaviour {
 
 			computeGravity();
 			bool gravityPressed = Input.GetKey(KeyCode.Space) || Input.touchCount > 0;
-			this.rigidbody2D.AddForce( ( gravityPressed ? _gravityFactor : 1) *_gravity);
+			this.GetComponent<Rigidbody2D>().AddForce( ( gravityPressed ? _gravityFactor : 1) *_gravity);
 			if(Input.GetKey(KeyCode.KeypadEnter) || Input.touchCount > 1) {
 				if(_energy.getEnergy()-EnergyCost>=0) {
 					startRotating();
@@ -58,10 +59,10 @@ public class Player : MonoBehaviour {
 
             if(Input.GetKey(KeyCode.Space) || Input.touchCount > 0 ) {
 				_velocityArrow.gameObject.SetActive(false);
-				this.rigidbody2D.WakeUp();
+				this.GetComponent<Rigidbody2D>().WakeUp();
 				float angle = _velocityArrow.Angle * 2 *Mathf.PI / 360.0f ;
 				Vector2 newVelocity = _lastVelocity.magnitude * new Vector2( Mathf.Cos (angle), Mathf.Sin(angle));
-				this.rigidbody2D.velocity = newVelocity;
+				this.GetComponent<Rigidbody2D>().velocity = newVelocity;
 				_state = PlayerState.Playing;
 			}
 
@@ -81,8 +82,8 @@ public class Player : MonoBehaviour {
 
 	private void startRotating() {
 		_state = PlayerState.Rotating;
-		_lastVelocity = this.rigidbody2D.velocity;
-		this.rigidbody2D.Sleep();
+		_lastVelocity = this.GetComponent<Rigidbody2D>().velocity;
+		this.GetComponent<Rigidbody2D>().Sleep();
 		_velocityArrow.gameObject.SetActive(true);
 	}
 

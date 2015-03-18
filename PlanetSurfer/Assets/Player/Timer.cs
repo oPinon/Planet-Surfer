@@ -9,21 +9,21 @@ public class Timer : MonoBehaviour {
 
 	void Start()
 	{
-		if( !guiText )
+		if( !GetComponent<GUIText>() )
 		{
 			Debug.Log( this.ToString() + " needs a GUIText component!");
 			enabled = false;
 			return;
 		}
 		_currentTime = 0;
-		_baseString = guiText.text;
+		_baseString = GetComponent<GUIText>().text;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
 		_currentTime += Time.deltaTime;
-		guiText.text = _baseString + (int)(10*_currentTime)/10.0f + "s";
+		GetComponent<GUIText>().text = _baseString + (int)(10*_currentTime)/10.0f + "s";
 	}
 
 	public float GetTime() { return _currentTime; }

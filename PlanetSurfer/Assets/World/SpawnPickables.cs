@@ -24,8 +24,8 @@ public class SpawnPickables : MonoBehaviour {
 			if(spawns[i]) {
 				float theta = i*(2*Mathf.PI) / spawns.Length;
 				float r = planet.radius(theta,Mathf.PI/2) + Height;
-				float x  = - r * Mathf.Cos(theta);
-				float y = r * Mathf.Sin(theta);
+				float x = r*Planet.xFromAngle(theta);
+				float y = r*Planet.yFromAngle(theta);
 				GameObject newObject = Instantiate(Pickable, transform.position, transform.rotation) as GameObject;
 				newObject.transform.position += new Vector3(x,y,0);
 			}

@@ -19,11 +19,11 @@ public class Energy : MonoBehaviour {
 
 		float x = this.transform.position.x * Screen.width;
 		float y = (1-this.transform.position.y) * Screen.height;
-		string message = (_energy == 100) ? "Ready !" : _energy + "%";
+		string message = (_energy >= 50) ? "Ready !" : _energy + "%";
 
 		GUI.DrawTexture( new Rect( x, y, Width, Height), Background );
 		GUI.DrawTexture( new Rect( x+Margin, y+Margin, (_energy*0.01f)*(Width-2*Margin), Height-2*Margin), Foreground );
-		GUI.Label( new Rect( x+Width+2*Margin, y+Margin, Width, Height), message);
+		GUI.Label( new Rect( x+Width+2*Margin, y+Margin, Width, Height), message );
 	}
 
 	public int getEnergy() {

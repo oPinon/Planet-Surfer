@@ -61,6 +61,7 @@
      <Compile Include="Assets\World\GalaxyGenerator.cs" />
      <Compile Include="Assets\World\IcoSphere.cs" />
      <Compile Include="Assets\World\Planet.cs" />
+     <Compile Include="Assets\World\PropsSpawner.cs" />
      <Compile Include="Assets\World\SpawnPickables.cs" />
      <Compile Include="Assets\World\SpawnPlayer.cs" />
  <Reference Include="UnityEngine.UI">

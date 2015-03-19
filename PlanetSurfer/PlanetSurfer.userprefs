@@ -1,15 +1,12 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Player\Player.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Player\Energy.cs">
     <Files>
+      <File FileName="Assets\World\PropsSpawner.cs" Line="30" Column="56" />
       <File FileName="Assets\Player\Player.cs" Line="1" Column="1" />
-      <File FileName="Assets\Menu\Buttons.cs" Line="1" Column="1" />
-      <File FileName="Assets\Menu\Rotate.cs" Line="1" Column="1" />
-      <File FileName="Assets\Player\Energy.cs" Line="1" Column="1" />
-      <File FileName="Assets\World\Planet.cs" Line="1" Column="1" />
-      <File FileName="Assets\World\EnergyPickable.cs" Line="1" Column="1" />
-      <File FileName="Assets\Player\GoalArea.cs" Line="1" Column="1" />
-      <File FileName="Assets\Player\Timer.cs" Line="1" Column="1" />
+      <File FileName="Assets\World\SpawnPickables.cs" Line="28" Column="40" />
+      <File FileName="Assets\World\Planet.cs" Line="62" Column="4" />
+      <File FileName="Assets\Player\Energy.cs" Line="26" Column="76" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

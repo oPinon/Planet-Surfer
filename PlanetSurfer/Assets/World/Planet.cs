@@ -52,9 +52,14 @@ public class Planet : MonoBehaviour {
 
 		generate();
 
-		SpawnPickables[] spawners = this.GetComponents<SpawnPickables>();
-		if(spawners != null) {
-			foreach(SpawnPickables s in spawners) { s.Spawn(); }
+		SpawnPickables[] pickSpawners = this.GetComponents<SpawnPickables>();
+		if(pickSpawners != null) {
+			foreach(SpawnPickables s in pickSpawners) { s.Spawn(); }
+		}
+
+		PropsSpawner[] propSpawners = this.GetComponents<PropsSpawner>();
+		if(propSpawners != null) {
+			foreach(PropsSpawner s in propSpawners) { s.Spawn(); }
 		}
 	}
 	
@@ -244,7 +249,11 @@ public class Planet : MonoBehaviour {
 		return radius(theta, Mathf.PI/2);
 	}
 
-	static float xFromAngle( float theta, float phi ) { return -Mathf.Cos(theta)*Mathf.Sin(phi); }
-	static float yFromAngle( float theta, float phi ) { return Mathf.Sin(theta)*Mathf.Sin(phi); }
-	static float zFromAngle( float theta, float phi ) { return Mathf.Cos(phi); }
+	public static float xFromAngle( float theta, float phi ) { return -Mathf.Cos(theta)*Mathf.Sin(phi); }
+	public static float yFromAngle( float theta, float phi ) { return Mathf.Sin(theta)*Mathf.Sin(phi); }
+	public static float zFromAngle( float theta, float phi ) { return Mathf.Cos(phi); }
+
+	public static float xFromAngle( float theta ) { return xFromAngle(theta,Mathf.PI/2); }
+	public static float yFromAngle( float theta ) { return yFromAngle(theta,Mathf.PI/2); }
+	public static float zFromAngle( float theta ) { return zFromAngle(theta,Mathf.PI/2); }
 }
